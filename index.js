@@ -1,16 +1,16 @@
-var users = {
+const users = {
     "user1": { "password": "pwd1", "role": "1" },
     "user2": { "password": "pwd2", "role": "2" },
     "user3": { "password": "pwd3", "role": "3" }
 };
 
 function login() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
     if (users.hasOwnProperty(username)) {
         if (users[username].password === password) {
-            var role = users[username].role;
+            const role = users[username].role;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('content').style.display = 'block';
 
@@ -34,7 +34,7 @@ function login() {
     }
 }
 
-function launchVM() {
+async function launchVM() {
     console.log("Lancement de la VM...");
 
     // Configuration de la requête
@@ -45,34 +45,24 @@ function launchVM() {
         }
     };
 
-    // Envoi de la requête
-    fetch('/lancer-vm', requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erreur lors de la requête: ' + response.status);
-            }
-            return response.json();
-        }).then(data => {
-            console.log('Réponse du serveur:', data);
-            // Traitez la réponse du serveur ici si nécessaire
-        })
-        .catch(error => {
-            console.error('Erreur lors de la requête:', error);
-        });
+
+  const response = await fetch('/lancer-vm', requestOptions);
+
+  return response.json();
 }
 
 
-function launchConfigVM() {
-    var vmType = document.getElementById('vm-type').value;
+async function launchConfigVM() {
+    const vmType = document.getElementById('vm-type').value;
 
 
     console.log("Lancement de la VM avec la configuration pour " + vmType);
 
     // Définition des données à envoyer
-    var data = { vmType: vmType };
+    const data = { vmType: vmType };
 
     // Configuration de la requête
-    var requestOptions = {
+    const requestOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -80,19 +70,8 @@ function launchConfigVM() {
         body: JSON.stringify(data)
     };
 
-    // Envoi de la requête
-    fetch('/config-vm', requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erreur lors de la requête: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Réponse du serveur:', data);
-            // Traitez la réponse du serveur ici si nécessaire
-        })
-        .catch(error => {
-            console.error('Erreur lors de la requête:', error);
-        });
+    const response = await fetch('/configurer-vm', requestOptions);
+
+    return response.json();
+
 }

@@ -47,7 +47,7 @@ let nicInfo = null;
 
 //Random number generator for service names and settings
 const resourceGroupName = _generateRandomId("rg_yass", randomIds);
-var vmName = _generateRandomId("vmPreconfig", randomIds);
+let vmName = _generateRandomId("vmPreconfig", randomIds);
 const storageAccountName = _generateRandomId("testac", randomIds);
 const vnetName = _generateRandomId("testvnet", randomIds);
 const subnetName = _generateRandomId("testsubnet", randomIds);
@@ -62,9 +62,9 @@ const location = "eastus";
 const accType = "Standard_LRS";
 
 // Ubuntu config for VM
-var publisher = "Canonical";
-var offer = "UbuntuServer";
-var sku = "14.04.3-LTS";
+let publisher = "Canonical";
+let offer = "UbuntuServer";
+let sku = "14.04.3-LTS";
 const adminUsername = "notadmin";
 const adminPassword = "Pa$$w0rd92";
 
@@ -302,7 +302,7 @@ const listVirtualMachines = async () => {
 };
 
 function _generateRandomId(prefix, existIds) {
-    var newNumber;
+    let newNumber;
     while (true) {
         newNumber = prefix + Math.floor(Math.random() * 10000);
         if (!existIds || !(newNumber in existIds)) {
