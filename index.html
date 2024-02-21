@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" type="text/css" src="/styles.css">
+</head>
+<body>
+    <div id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <button onclick="login()">Login</button>
+    </div>
+    <div id="content" style="display: none;">
+        <p id="message"></p>
+        <button id="launch-vm-button" style="display: none;" onclick="launchVM()">Launch VM</button>
+        <select id="vm-type" style="display: none;">
+            <option value="linux">Linux</option>
+            <option value="windows">Windows</option>
+        </select>
+        <button id="launch-config-vm-button" style="display: none;" onclick="launchConfigVM()">Launch VM with Config</button>
+        <div id="connection-params"></div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
