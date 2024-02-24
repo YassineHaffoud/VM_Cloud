@@ -323,27 +323,8 @@ const deleteResourceGroup = async (resourceGroupName) => {
     }
 };
 
-async function getPublicIpAddress(resourceGroup, vmName) {
-    try {
-        // Récupérer l'ID de l'adresse IP publique principale associée à la VM
-        const vm = await computeClient.virtualMachines.get(resourceGroupName, vmName);
-        const networkInterfaceId = vm.networkProfile.networkInterfaces[0].id;
-        const networkInterface = await networkClient.networkInterfaces.get(
-            resourceGroupName,
-            extractNameFromId(networkInterfaceId)
-        );
-
-        const publicIpAddressId = networkInterface.ipConfigurations[0].publicIPAddress.id;
-        const publicIpAddress = await networkClient.publicIPAddresses.get(
-            resourceGroupName,
-            extractNameFromId(publicIpAddressId)
-        );
-
-        return publicIpAddress.ipAddress;
-    } catch (error) {
-        console.error("Erreur lors de la récupération de l'adresse IP publique :", error);
-        return null;
-    }
+async function getPublicIpAddress(resourceGroupName, publicIPName) {
+    return networkClient.publicIPAddresses.get(resourceGroupName, publicIPName);
 }
 
 
@@ -353,15 +334,17 @@ app.post('/lancer-vm', async (req, res) => { // Ajoutez le mot-clé async ici
     try {
         await createResources();
         console.log("Ressources créées avec succès");
-        getPublicIpAddress(resourceGroupName, vmName);
+
+        const publicIP = await getPublicIpAddress(resourceGroupName, publicIPName);
+        console.log("Adresse IP publique de la VM:", publicIP.ipAddress);
 
         // Supprimer le groupe de ressources après un certain délai (par exemple, 60 secondes)
         setTimeout(async () => {
             await deleteResourceGroup(resourceGroupName);
-        }, 10000);
+        }, 120000);
 
         // Envoyer les paramètres de connexion à l'utilisateur
-        //res.json(connectionParameters);
+        res.json({ ipAddress: publicIP.ipAddress, username: adminUsername, password: adminPassword});
     } catch (err) {
         console.log(err);
         res.status(500).send('Une erreur s\'est produite lors de la configuration de la VM');
@@ -385,42 +368,47 @@ app.post('/config-vm', async (req, res) => {
             publisher = "MicrosoftWindowsServer";
             offer = "WindowsServer";
             sku = "2019-Datacenter";
-        } else {
+        } else if (vmType === "linux") {
             console.log("Configuration de la VM Linux");
             // Linux config for VM
             publisher = "Canonical";
             offer = "UbuntuServer";
             sku = "14.04.3-LTS";
+        } else if (vmType === "debian") {
+            console.log("Configuration de la VM Debian");
+            // Debian config for VM
+            publisher = "Debian";
+            offer = "debian-10";
+            sku = "10";
+        } else {
+            console.error("Type de VM non valide :", vmType);
         }
 
         // Créer les ressources et gérer les VM
         await createResources();
-        //await manageResources();
 
-        const connectionParameters = await getVMConnectionParameters();
-
-        // Envoyer les paramètres de connexion à l'utilisateur
-        res.json(connectionParameters);
+        const publicIP = await getPublicIpAddress(resourceGroupName, publicIPName);
+        console.log("Adresse IP publique de la VM:", publicIP.ipAddress);
 
         // Supprimer le groupe de ressources après un certain délai (par exemple, 60 secondes)
         setTimeout(async () => {
             await deleteResourceGroup(resourceGroupName);
-        }, 10000);
+        }, 120000);
 
-        // Envoyer une réponse au client
-        res.send('Données de configuration de la VM reçues avec succès');
+        // Envoyer les paramètres de connexion à l'utilisateur
+        res.json({ ipAddress: publicIP.ipAddress, username: adminUsername, password: adminPassword});
     } catch (err) {
         console.log(err);
         res.status(500).send('Une erreur s\'est produite lors de la configuration de la VM');
     }
 });
 
-
-
-// main()
-//   .then(() => {
-//     console.log("success " + resourceGroupName);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+app.delete('/stop-vm', async (req, res) => {
+    try {
+        await deleteResourceGroup(resourceGroupName);
+        res.status(200).send('La VM a été arrêtée avec succès et le groupe de ressources a été supprimé');
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Une erreur s\'est produite lors de l\'arrêt de la VM');
+    }
+});

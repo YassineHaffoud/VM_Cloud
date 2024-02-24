@@ -4,6 +4,7 @@ const users = {
     "user3": { "password": "pwd3", "role": "3" }
 };
 
+
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -19,10 +20,14 @@ function login() {
             } else if (role === "2") {
                 document.getElementById('message').innerText = "Bienvenue! Vous pouvez lancer la VM.";
                 document.getElementById('launch-vm-button').style.display = 'block';
+                document.getElementById('stop-vm-button').style.display = 'block';
+                document.getElementById('stop-vm-button').disabled = true;
             } else if (role === "3") {
                 document.getElementById('message').innerText = "Bienvenue! Vous pouvez configurer et lancer la VM.";
                 document.getElementById('vm-type').style.display = 'block';
                 document.getElementById('launch-config-vm-button').style.display = 'block';
+                document.getElementById('stop-vm-button').style.display = 'block';
+                document.getElementById('stop-vm-button').disabled = true;
             } else {
                 console.error("Rôle non valide pour l'utilisateur");
             }
@@ -37,6 +42,13 @@ function login() {
 async function launchVM() {
     console.log("Lancement de la VM...");
 
+    // Désactiver le bouton de lancement de la VM
+    document.getElementById('launch-vm-button').disabled = true;
+    document.getElementById('stop-vm-button').disabled = false;
+
+    document.getElementById("connection-params").textContent = "Création de la machine virtuelle...";
+    document.getElementById('loading-spinner').style.display = 'flex';
+
     // Configuration de la requête
     var requestOptions = {
         method: 'POST',
@@ -45,18 +57,39 @@ async function launchVM() {
         }
     };
 
+    try {
+        const response = await fetch('/lancer-vm', requestOptions);
+        const data = await response.json(); // Attendre la résolution de la promesse de réponse et la transformer en JSON
 
-  const response = await fetch('/lancer-vm', requestOptions);
+        // Construire la chaîne de réponse avec chaque élément sur une ligne distincte
+        const responseString = `Adresse IP: ${data.ipAddress}\nNom d'utilisateur: ${data.username}\nMot de passe: ${data.password}`;
 
-  return response.json();
+        // Sélectionner l'élément où vous voulez afficher la réponse
+        const responseElement = document.getElementById("connection-params");
+
+        // Mettre à jour le contenu de l'élément avec la chaîne de réponse
+        responseElement.textContent = responseString;
+
+        return data; // Retourner les données
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des données :", error);
+        throw error; // Re-lancer l'erreur pour qu'elle soit gérée à l'extérieur de la fonction
+    } finally {
+        // Masquer le logo de chargement une fois la réponse reçue ou en cas d'erreur
+        document.getElementById('loading-spinner').style.display = 'none';
+    }
 }
-
 
 async function launchConfigVM() {
     const vmType = document.getElementById('vm-type').value;
-
-
     console.log("Lancement de la VM avec la configuration pour " + vmType);
+
+    // Désactiver le bouton de lancement de la configuration VM
+    document.getElementById('launch-config-vm-button').disabled = true;
+    document.getElementById('stop-vm-button').disabled = false;
+
+    // Afficher le logo de chargement
+    document.getElementById('loading-spinner').style.display = 'flex';
 
     // Définition des données à envoyer
     const data = { vmType: vmType };
@@ -70,8 +103,49 @@ async function launchConfigVM() {
         body: JSON.stringify(data)
     };
 
-    const response = await fetch('/configurer-vm', requestOptions);
+    try {
+        const response = await fetch('/config-vm', requestOptions);
+        const data = await response.json(); // Attendre la résolution de la promesse de réponse et la transformer en JSON
 
-    return response.json();
+        // Construire la chaîne de réponse avec chaque élément sur une ligne distincte
+        const responseString = `Adresse IP: ${data.ipAddress}\nNom d'utilisateur: ${data.username}\nMot de passe: ${data.password}`;
 
+        // Sélectionner l'élément où vous voulez afficher la réponse
+        const responseElement = document.getElementById("connection-params");
+
+        // Mettre à jour le contenu de l'élément avec la chaîne de réponse
+        responseElement.textContent = responseString;
+
+        return data; // Retourner les données
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des données :", error);
+        throw error; // Re-lancer l'erreur pour qu'elle soit gérée à l'extérieur de la fonction
+    } finally {
+        // Masquer le logo de chargement une fois la réponse reçue ou en cas d'erreur
+        document.getElementById('loading-spinner').style.display = 'none';
+    }
+}
+
+
+async function stopVM() {
+    console.log("Suppression de la VM...");
+
+    // Configuration de la requête
+    var requestOptions = {
+        method: 'DELETE'
+    };
+
+    document.getElementById('loading-spinner').style.display = 'flex';
+    document.getElementById("connection-params").textContent = "Machine en cours de suppression...";
+
+    const response = await fetch('/stop-vm', requestOptions);
+    document.getElementById("connection-params").textContent = "";
+    document.getElementById('loading-spinner').style.display = 'none';
+
+    return response;
+}
+
+function logout() {
+    // Recharger la page pour effectuer la déconnexion
+    location.reload();
 }

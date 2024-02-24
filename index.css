@@ -1,45 +1,86 @@
+* {
+    margin: 1rem;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto avec une police de secours sans empattement */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f2f2f2;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    height: 100vh; /* Utiliser toute la hauteur de la fenêtre */
+    margin: 3;
+    background-color: #cfcfcf; /* Couleur de fond */
 }
 
-.login-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
+#login-form {
     text-align: center;
+    background-color: #ffffff; /* Couleur de fond */
+    padding: 20px;
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre */
 }
 
-input[type="text"],
-input[type="password"],
-select {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    width: 200px; /* Largeur des champs de saisie */
+    padding: 10px; /* Espacement intérieur */
+    margin-bottom: 10px; /* Marge en bas */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 5px; /* Bordures arrondies */
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
+#login-form button {
+    padding: 10px 20px; /* Espacement intérieur (haut/bas gauche/droite) */
+    background-color: #007bff; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Bordures arrondies */
+    cursor: pointer; /* Curseur de la souris */
 }
 
-button:hover {
-    background-color: #0056b3;
+#login-form button:hover {
+    background-color: #0056b3; /* Couleur de fond au survol */
 }
+
+#content {
+    margin-top: 20px; /* Marge en haut */
+}
+
+#connection-params {
+    margin-top: 20px; /* Marge en haut */
+    padding: 20px;
+    background-color: #ffffff; /* Couleur de fond */
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre */
+}
+
+/* Styles pour les boutons avec la classe styled-button */
+.styled-button {
+    padding: 10px 20px; /* Espacement intérieur (haut/bas gauche/droite) */
+    background-color: #007bff; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Bordures arrondies */
+    cursor: pointer; /* Curseur de la souris */
+    font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto */
+}
+
+.styled-button:hover {
+    background-color: #0056b3; /* Couleur de fond au survol */
+}
+
+/* Styles pour les sélecteurs avec la classe styled-select */
+.styled-select {
+    padding: 10px; /* Espacement intérieur */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 5px; /* Bordures arrondies */
+    font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto */
+}
+
+#stop-vm-button {
+   background-color: red;
+}
+
+#stop-vm-button:hover {
+        background-color: rgb(180, 1, 1);
+ }
