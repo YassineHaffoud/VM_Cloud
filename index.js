@@ -18,7 +18,7 @@ function login() {
             if (role === "1") {
                 document.getElementById('message').innerText = "Vous n'avez aucun droit.";
             } else if (role === "2") {
-                document.getElementById('message').innerText = "Bienvenue ! Vous pouvez lancer la VM.";
+                document.getElementById('message').innerText = "Bienvenue ! Vous pouvez lancer la VM Linux.";
                 document.getElementById('launch-vm-button').style.display = 'block';
                 document.getElementById('stop-vm-button').style.display = 'block';
                 document.getElementById('stop-vm-button').disabled = true;
