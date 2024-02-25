@@ -29,12 +29,14 @@ Le serveur est maintenant lancé, vous pouvez y accéder via http://localhost:30
 
 Une fois la VM lancé, les informations de connexions vous seront renvoyés sur l'interface web. Vous pouvez vous y connecter pour Debian/Linux en faisant (veillez à retirer les crochets) :
 
+```bash
 ssh [utilisateur]@[adresse_ip]
+```
 
 Pour une VM Windows :
 
+```bash
 xfreerdp /v:[adresse_ip] /u:[utilisateur] /p:[mot_de_passe]
-
-
+```
 
 
