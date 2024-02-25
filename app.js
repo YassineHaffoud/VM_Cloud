@@ -66,7 +66,7 @@ let publisher = "Canonical";
 let offer = "UbuntuServer";
 let sku = "14.04.3-LTS";
 const adminUsername = "notadmin";
-const adminPassword = "Pa$$w0rd92";
+const adminPassword = "Pwd1234!";
 
 
 // Azure platform authentication
@@ -112,7 +112,6 @@ function generateLinuxHostname(prefix, maxChars) {
 
 
 const createResources = async () => {
-    console.log("createResources");
     try {
         result = await createResourceGroup();
         accountInfo = await createStorageAccount();
@@ -341,7 +340,7 @@ app.post('/lancer-vm', async (req, res) => { // Ajoutez le mot-clé async ici
         // Supprimer le groupe de ressources après un certain délai (par exemple, 60 secondes)
         setTimeout(async () => {
             await deleteResourceGroup(resourceGroupName);
-        }, 120000);
+        }, 240000);
 
         // Envoyer les paramètres de connexion à l'utilisateur
         res.json({ ipAddress: publicIP.ipAddress, username: adminUsername, password: adminPassword});
@@ -393,7 +392,7 @@ app.post('/config-vm', async (req, res) => {
         // Supprimer le groupe de ressources après un certain délai (par exemple, 60 secondes)
         setTimeout(async () => {
             await deleteResourceGroup(resourceGroupName);
-        }, 120000);
+        }, 240000);
 
         // Envoyer les paramètres de connexion à l'utilisateur
         res.json({ ipAddress: publicIP.ipAddress, username: adminUsername, password: adminPassword});

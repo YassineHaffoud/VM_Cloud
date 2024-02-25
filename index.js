@@ -18,12 +18,12 @@ function login() {
             if (role === "1") {
                 document.getElementById('message').innerText = "Vous n'avez aucun droit.";
             } else if (role === "2") {
-                document.getElementById('message').innerText = "Bienvenue! Vous pouvez lancer la VM.";
+                document.getElementById('message').innerText = "Bienvenue ! Vous pouvez lancer la VM.";
                 document.getElementById('launch-vm-button').style.display = 'block';
                 document.getElementById('stop-vm-button').style.display = 'block';
                 document.getElementById('stop-vm-button').disabled = true;
             } else if (role === "3") {
-                document.getElementById('message').innerText = "Bienvenue! Vous pouvez configurer et lancer la VM.";
+                document.getElementById('message').innerText = "Bienvenue ! Vous pouvez configurer et lancer la VM.";
                 document.getElementById('vm-type').style.display = 'block';
                 document.getElementById('launch-config-vm-button').style.display = 'block';
                 document.getElementById('stop-vm-button').style.display = 'block';
@@ -77,6 +77,7 @@ async function launchVM() {
     } finally {
         // Masquer le logo de chargement une fois la réponse reçue ou en cas d'erreur
         document.getElementById('loading-spinner').style.display = 'none';
+        document.getElementById('launch-vm-button').disabled = false;
     }
 }
 
@@ -84,7 +85,7 @@ async function launchConfigVM() {
     const vmType = document.getElementById('vm-type').value;
     console.log("Lancement de la VM avec la configuration pour " + vmType);
 
-    // Désactiver le bouton de lancement de la configuration VM
+    document.getElementById("connection-params").textContent = "Création de la machine virtuelle...";
     document.getElementById('launch-config-vm-button').disabled = true;
     document.getElementById('stop-vm-button').disabled = false;
 
@@ -123,6 +124,7 @@ async function launchConfigVM() {
     } finally {
         // Masquer le logo de chargement une fois la réponse reçue ou en cas d'erreur
         document.getElementById('loading-spinner').style.display = 'none';
+        document.getElementById('launch-config-vm-button').disabled = false;
     }
 }
 
